@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>تطبيق إدارة الواجبات</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+    <!-- إضافة مكتبة flatpickr -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ar.js"></script>
+    <!-- إضافة Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js"></script>
+</head>
+<body>
+    <!-- الصفحة الرئيسية -->
+    <div id="home-page" class="container">
+        <h1 class="app-title">تطبيق إدارة الواجبات</h1>
+        <div id="school-info" class="school-info">
+            <p>إدارة التعليم: <span id="education-department"></span></p>
+            <p>اسم المدرسة: <span id="school-name"></span></p>
+        </div>
+        <div class="home-buttons">
+            <button id="admin-btn" class="home-btn admin-btn" onclick="navigateTo('admin-login-page')">
+                <span class="btn-text">الإدارة</span>
+            </button>
+            <button id="teacher-btn" class="home-btn teacher-btn" onclick="navigateTo('teacher-login-page')">
+                <span class="btn-text">المعلم</span>
+            </button>
+            <button id="student-btn" class="home-btn student-btn" onclick="navigateTo('student-page')">
+                <span class="btn-text">الطالب</span>
+            </button>
+        </div>
+        <div class="footer">
+            <p>معد البرنامج: سامي الشهيل</p>
+        </div>
+    </div>
+
+    <!-- صفحة تسجيل دخول الإدارة -->
+    <div id="admin-login-page" class="container hidden">
+        <h2 class="page-title">تسجيل دخول الإدارة</h2>
+        <div class="login-form">
+            <div class="form-group">
+                <label for="admin-username">اسم المستخدم:</label>
+                <input type="text" id="admin-username" class="mobile-friendly-input" placeholder="اسم المستخدم">
+            </div>
+            <div class="form-group">
+                <label for="admin-password">كلمة المرور:</label>
+                <input type="password" id="admin-password" class="mobile-friendly-input" placeholder="كلمة المرور">
+            </div>
+            <div class="form-group">
+                <label><input type="checkbox" id="admin-remember-me"> تذكرني</label>
+            </div>
+            <button id="admin-login-btn" class="login-btn">تسجيل الدخول</button>
+        </div>
+        <button id="back-from-admin-login" class="back-btn">رجوع</button>
+    </div>
+
+    <!-- صفحة تغيير بيانات الإدارة -->
+    <div id="change-admin-credentials-page" class="container hidden">
+        <h2 class="page-title">تغيير بيانات الإدارة</h2>
+        <div class="login-form">
+            <div class="form-group">
+                <label for="new-admin-username">اسم المستخدم الجديد:</label>
+                <input type="text" id="new-admin-username" class="mobile-friendly-input" placeholder="أدخل اسم المستخدم الجديد">
+            </div>
+            <div class="form-group">
+                <label for="new-admin-password">كلمة المرور الجديدة:</label>
+                <input type="password" id="new-admin-password" class="mobile-friendly-input" placeholder="أدخل كلمة المرور الجديدة">
+            </div>
+            <div class="form-group">
+                <label for="confirm-admin-password">تأكيد كلمة المرور:</label>
+                <input type="password" id="confirm-admin-password" class="mobile-friendly-input" placeholder="أعد إدخال كلمة المرور">
+            </div>
+            <button id="save-admin-credentials-btn" class="save-btn">حفظ التغييرات</button>
+        </div>
+        <button id="back-from-change-admin-credentials" class="back-btn">رجوع</button>
+    </div>
+
+    <!-- صفحة الإدارة -->
+    <div id="admin-page" class="container hidden">
+        <h2 class="page-title">لوحة الإدارة</h2>
+        <div class="buttons-container">
+            <button id="school-info-btn" class="admin-option-btn">بيانات المدرسة</button>
+            <button id="add-classes-btn" class="admin-option-btn">إضافة صفوف وفصول</button>
+            <button id="add-subjects-btn" class="admin-option-btn">إضافة مواد للصفوف</button>
+            <button id="setup-schedules-btn" class="admin-option-btn">إعداد الجداول الدراسية</button>
+            <button id="add-teachers-btn" class="admin-option-btn">إضافة معلمين</button>
+            <button id="reports-btn" class="admin-option-btn">تقارير</button>
+            <button id="change-admin-credentials-btn" class="admin-option-btn">تغيير بيانات الحساب</button>
+            <button id="back-from-admin" class="back-btn">رجوع</button>
+        </div>
+    </div>
+
+    <!-- صفحة بيانات المدرسة -->
+    <div id="school-info-page" class="container hidden">
+        <h2 class="page-title">بيانات المدرسة</h2>
+        <div class="login-form">
+            <div class="form-group">
+                <label for="education-department-input">إدارة التعليم:</label>
+                <input type="text" id="education-department-input" class="mobile-friendly-input" placeholder="أدخل إدارة التعليم">
+            </div>
+            <div class="form-group">
+                <label for="school-name-input">اسم المدرسة:</label>
+                <input type="text" id="school-name-input" class="mobile-friendly-input" placeholder="أدخل اسم المدرسة">
+            </div>
+            <button id="save-school-info-btn" class="save-btn">حفظ البيانات</button>
+        </div>
+        <button id="back-from-school-info" class="back-btn">رجوع</button>
+    </div>
+
+    <!-- صفحة إضافة الصفوف -->
+    <div id="add-classes-page" class="container hidden">
+        <h2 class="page-title">إضافة صفوف وفصول</h2>
+        <div class="add-item-container">
+            <input type="text" id="new-class-input" class="mobile-friendly-input" placeholder="اسم الصف الجديد">
+            <button id="add-class-btn" class="add-btn">إضافة صف</button>
+        </div>
+        <div id="classes-list" class="items-list"></div>
+        <button id="back-from-classes" class="back-btn">رجوع</button>
+    </div>
+
+    <!-- صفحة إضافة الفصول -->
+    <div id="add-sections-page" class="container hidden">
+        <h2 class="page-title">إضافة فصول لـ <span id="selected-class-name"></span></h2>
+        <div class="add-item-container">
+            <input type="text" id="new-section-input" class="mobile-friendly-input" placeholder="اسم الفصل الجديد">
+            <button id="add-section-btn" class="add-btn">إضافة فصل</button>
+        </div>
+        <div id="sections-list" class="items-list"></div>
+        <button id="back-from-sections" class="back-btn">رجوع</button>
+    </div>
+
+    <!-- صفحة إضافة المواد -->
+    <div id="add-subjects-page" class="container hidden">
+        <h2 class="page-title">إضافة مواد للصفوف</h2>
+        <div class="add-item-container">
+            <select id="class-select" class="mobile-friendly-input">
+                <option value="">-- اختر الصف --</option>
+            </select>
+            <input type="text" id="new-subject-input" class="mobile-friendly-input" placeholder="اسم المادة الجديدة">
+            <button id="add-subject-btn" class="add-btn">إضافة مادة</button>
+        </div>
+        <div id="class-subjects-list" class="items-list"></div>
+        <button id="back-from-subjects" class="back-btn">رجوع</button>
+    </div>
+
+    <!-- صفحة إعداد الجداول الدراسية -->
+    <div id="setup-schedules-page" class="container hidden">
+        <h2 class="page-title">إعداد الجداول الدراسية</h2>
+        <div id="classes-list-for-schedules" class="items-list"></div>
+        <button id="back-from-schedules" class="back-btn">رجوع</button>
+    </div>
+
+    <!-- صفحة اختيار الفصل لإعداد الجدول -->
+    <div id="schedule-sections-page" class="container hidden">
+        <h2 class="page-title">اختر الفصل لإعداد الجدول</h2>
+        <div id="sections-list-for-schedules" class="items-list"></div>
+        <button id="back-from-schedule-sections" class="back-btn">رجوع</button>
+    </div>
+
+    <!-- صفحة جدول الفصل -->
+    <div id="class-schedule-page" class="container hidden">
+        <h2 class="page-title">جدول الفصل</h2>
+        <div class="schedule-container">
+            <table id="class-schedule-table">
+                <thead><tr></tr></thead>
+                <tbody id="schedule-tbody"></tbody>
+            </table>
+        </div>
+        <button id="save-schedule-btn" class="save-btn">حفظ الجدول</button>
+        <button id="back-from-schedule" class="back-btn">رجوع</button>
+    </div>
+
+    <!-- نافذة اختيار المادة -->
+    <div id="subject-selection-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3>اختر المادة</h3>
+            <div id="subjects-dropdown-list" class="subjects-dropdown"></div>
+            <button id="cancel-subject-selection" class="cancel-btn">إلغاء</button>
+        </div>
+    </div>
+
+    <!-- صفحة إضافة المعلمين -->
+    <div id="add-teachers-page" class="container hidden">
+        <h2 class="page-title">إضافة معلمين</h2>
+        <div class="add-item-container">
+            <input type="text" id="new-teacher-input" class="mobile-friendly-input" placeholder="اسم المعلم الجديد">
+            <button id="add-teacher-btn" class="add-btn">إضافة معلم</button>
+        </div>
+        <div id="teachers-list" class="items-list"></div>
+        <button id="back-from-teachers" class="back-btn">رجوع</button>
+    </div>
+
+    <!-- صفحة تفاصيل المعلم -->
+    <div id="teacher-details-page" class="container hidden">
+        <h2 class="page-title">تفاصيل المعلم: <span id="teacher-name-display"></span></h2>
+        <div class="teacher-options">
+            <button id="assign-subjects-btn" class="teacher-option-btn">إسناد مواد</button>
+            <button id="generate-password-btn" class="teacher-option-btn">توليد كلمة مرور جديدة</button>
+            <button id="change-teacher-credentials-btn" class="teacher-option-btn">تغيير بيانات الحساب</button>
+            <div id="password-display" class="password-display hidden">
+                كلمة المرور الجديدة: <span id="generated-password"></span>
+            </div>
+        </div>
+        <button id="back-from-teacher-details" class="back-btn">رجوع</button>
+    </div>
+
+    <!-- صفحة تغيير بيانات المعلم -->
+    <div id="change-teacher-credentials-page" class="container hidden">
+        <h2 class="page-title">تغيير بيانات المعلم</h2>
+        <div class="login-form">
+            <div class="form-group">
+                <label for="new-teacher-username">اسم المستخدم الجديد:</label>
+                <input type="text" id="new-teacher-username" class="mobile-friendly-input" placeholder="أدخل اسم المستخدم الجديد">
+            </div>
+            <div class="form-group">
+                <label for="new-teacher-password">كلمة المرور الجديدة:</label>
+                <input type="password" id="new-teacher-password" class="mobile-friendly-input" placeholder="أدخل كلمة المرور الجديدة">
+            </div>
+            <div class="form-group">
+                <label for="confirm-teacher-password">تأكيد كلمة المرور:</label>
+                <input type="password" id="confirm-teacher-password" class="mobile-friendly-input" placeholder="أعد إدخال كلمة المرور">
+            </div>
+            <button id="save-teacher-credentials-btn" class="save-btn">حفظ التغييرات</button>
+        </div>
+        <button id="back-from-change-teacher-credentials" class="back-btn">رجوع</button>
+    </div>
+
+    <!-- صفحة إسناد المواد -->
+    <div id="assign-subjects-page" class="container hidden">
+        <h2 class="page-title">إسناد مواد لـ <span id="assign-teacher-name"></span></h2>
+        <div id="internal-alert-container" class="internal-alert hidden"></div>
+        <div class="assignment-steps">
+            <div id="step1" class="step">
+                <h3>الخطوة 1: اختر الصف</h3>
+                <div id="classes-list-for-assignment" class="items-list"></div>
+            </div>
+            <div id="step2" class="step hidden">
+                <h3>الخطوة 2: اختر الفصل</h3>
+                <div id="sections-list-for-assignment" class="items-list"></div>
+                <button id="back-to-step1" class="back-btn">رجوع</button>
+            </div>
+            <div id="step3" class="step hidden">
+                <h3>الخطوة 3: اختر المادة</h3>
+                <div id="subjects-list-for-assignment" class="items-list"></div>
+                <button id="back-to-step2" class="back-btn">رجوع</button>
+            </div>
+        </div>
+        <button id="back-from-assign" class="back-btn">رجوع</button>
+    </div>
+
+    <!-- صفحة تسجيل دخول المعلم -->
+    <div id="teacher-login-page" class="container hidden">
+        <h2 class="page-title">تسجيل دخول المعلم</h2>
+        <div class="login-form">
+            <div class="form-group">
+                <label for="teacher-username">اسم المستخدم:</label>
+                <input type="text" id="teacher-username" class="mobile-friendly-input" placeholder="اسم المعلم">
+            </div>
+            <div class="form-group">
+                <label for="teacher-password">كلمة المرور:</label>
+                <input type="password" id="teacher-password" class="mobile-friendly-input" placeholder="كلمة المرور">
+            </div>
+            <div class="form-group">
+                <label><input type="checkbox" id="teacher-remember-me"> تذكرني</label>
+            </div>
+            <button id="teacher-login-btn" class="login-btn">تسجيل الدخول</button>
+        </div>
+        <button id="back-from-teacher-login" class="back-btn">رجوع</button>
+    </div>
+
+    <!-- صفحة جدول المعلم -->
+    <div id="teacher-schedule-page" class="container hidden">
+        <h2 class="page-title">جدول المعلم: <span id="logged-teacher-name"></span></h2>
+        <div class="schedule-container">
+            <table id="teacher-schedule-table">
+                <tbody id="teacher-schedule-tbody"></tbody>
+            </table>
+        </div>
+        <button id="back-from-teacher-schedule" class="back-btn">رجوع</button>
+    </div>
+
+    <!-- صفحة إضافة الواجب -->
+    <div id="add-homework-page" class="container hidden">
+        <h2 class="page-title">إضافة واجب</h2>
+        <div class="homework-info">
+            <p>اليوم: <span id="homework-day"></span></p>
+            <p>الحصة: <span id="homework-period"></span></p>
+            <p>المادة: <span id="homework-subject"></span></p>
+            <p>الصف: <span id="homework-class"></span></p>
+            <p>الفصل: <span id="homework-section"></span></p>
+        </div>
+        <div class="form-group">
+            <label for="lesson-title">عنوان الدرس:</label>
+            <input type="text" id="lesson-title" class="mobile-friendly-input" placeholder="أدخل عنوان الدرس">
+        </div>
+        <textarea id="homework-text" class="mobile-friendly-textarea" placeholder="اكتب الواجب هنا"></textarea>
+        <div class="buttons-container">
+            <button id="save-homework-btn" class="save-btn">حفظ الواجب</button>
+            <button id="delete-homework-btn" class="delete-btn hidden">حذف الواجب</button>
+            <button id="back-from-homework" class="back-btn">رجوع</button>
+        </div>
+    </div>
+
+    <!-- صفحة التقارير (محدثة) -->
+    <div id="reports-page" class="container hidden">
+        <h2 class="page-title">تقارير الواجبات</h2>
+        <div class="report-tabs">
+            <button id="section-report-tab" class="tab-btn active">تقارير حسب الفصل</button>
+            <button id="teacher-report-tab" class="tab-btn">تقارير حسب المعلم</button>
+        </div>
+        <!-- تقارير حسب الفصل -->
+        <div id="section-report" class="report-section">
+            <div class="report-filters">
+                <div class="form-group">
+                    <label for="report-class-select">اختر الصف:</label>
+                    <select id="report-class-select" class="mobile-friendly-input">
+                        <option value="">-- اختر الصف --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="report-section-select">اختر الفصل:</label>
+                    <select id="report-section-select" class="mobile-friendly-input">
+                        <option value="">-- اختر الفصل --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="report-period">الفترة:</label>
+                    <select id="report-period" class="mobile-friendly-input">
+                        <option value="daily">يومي</option>
+                        <option value="weekly">أسبوعي</option>
+                        <option value="monthly">شهري</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="report-date">اختر التاريخ:</label>
+                    <input type="text" id="report-date" class="mobile-friendly-input" placeholder="اختر اليوم/الأسبوع/الشهر">
+                </div>
+                <button id="generate-section-report-btn" class="save-btn">عرض التقرير</button>
+            </div>
+            <div id="section-report-results" class="report-results"></div>
+        </div>
+        <!-- تقارير حسب المعلم -->
+        <div id="teacher-report" class="report-section hidden">
+            <div class="report-filters">
+                <div class="form-group">
+                    <label for="report-teacher-select">اختر المعلم:</label>
+                    <select id="report-teacher-select" class="mobile-friendly-input">
+                        <option value="">-- اختر المعلم --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="teacher-report-period">الفترة:</label>
+                    <select id="teacher-report-period" class="mobile-friendly-input">
+                        <option value="daily">يومي</option>
+                        <option value="weekly">أسبوعي</option>
+                        <option value="monthly">شهري</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="teacher-report-date">اختر التاريخ:</label>
+                    <input type="text" id="teacher-report-date" class="mobile-friendly-input" placeholder="اختر اليوم/الأسبوع/الشهر">
+                </div>
+                <button id="generate-teacher-report-btn" class="save-btn">عرض التقرير</button>
+            </div>
+            <div id="teacher-report-results" class="report-results"></div>
+        </div>
+        <button id="back-from-reports" class="back-btn">رجوع</button>
+    </div>
+
+    <!-- صفحة الطالب -->
+    <div id="student-page" class="container hidden">
+        <h2 class="page-title">اختر الصف</h2>
+        <div id="student-classes-list" class="items-list"></div>
+        <button id="back-from-student" class="back-btn">رجوع</button>
+    </div>
+
+    <!-- صفحة اختيار الفصل للطالب -->
+    <div id="student-sections-page" class="container hidden">
+        <h2 class="page-title">اختر الفصل لـ <span id="student-class-name"></span></h2>
+        <div id="student-sections-list" class="items-list"></div>
+        <button id="back-from-student-sections" class="back-btn">رجوع</button>
+    </div>
+
+    <!-- صفحة جدول الطالب -->
+    <div id="student-schedule-page" class="container hidden">
+        <h2 class="page-title">جدول <span id="student-schedule-class"></span> - <span id="student-schedule-section"></span></h2>
+        <div class="schedule-container">
+            <table id="student-schedule-table">
+                <tbody id="student-schedule-tbody"></tbody>
+            </table>
+        </div>
+        <button id="back-from-student-schedule" class="back-btn">رجوع</button>
+    </div>
+
+    <!-- صفحة عرض الواجب -->
+    <div id="view-homework-page" class="container hidden">
+        <h2 class="page-title">عرض الواجب</h2>
+        <div class="homework-info">
+            <p>اليوم: <span id="view-homework-day"></span></p>
+            <p>الحصة: <span id="view-homework-period"></span></p>
+            <p>المادة: <span id="view-homework-subject"></span></p>
+            <p>عنوان الدرس: <span id="view-homework-lesson-title"></span></p>
+        </div>
+        <div class="homework-content">
+            <h3>الواجب:</h3>
+            <p id="homework-content-text"></p>
+        </div>
+        <button id="back-from-view-homework" class="back-btn">رجوع</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

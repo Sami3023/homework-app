@@ -1,0 +1,832 @@
+/* أساسيات التصميم المتجاوب */
+:root {
+    --primary-color: #1e3c72;
+    --secondary-color: #2a5298;
+    --text-color: #333;
+    --light-gray: #f5f5f5;
+    --border-radius: 12px;
+    --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+    --calendar-border: #dfe4ea;
+}
+
+/* تنسيق تبويبات التقارير */
+.report-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.tab-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: var(--border-radius);
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.tab-btn.active {
+    background: linear-gradient(45deg, #4facfe, #00f2fe);
+    transform: scale(1.05);
+}
+
+.tab-btn:hover {
+    transform: scale(1.05);
+}
+
+.tab-btn:active {
+    transform: scale(0.95);
+}
+
+/* تنسيق أقسام التقارير */
+.report-section {
+    padding: 15px;
+    background: #f1f2f6;
+    border-radius: var(--border-radius);
+    margin-bottom: 20px;
+}
+
+/* تنسيق حقل التقويم (flatpickr) */
+.flatpickr-input {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid var(--calendar-border);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    font-family: 'Cairo', sans-serif;
+    background: #f1f2f6;
+    box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.1);
+    transition: var(--transition);
+}
+
+.flatpickr-input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+.flatpickr-calendar {
+    font-family: 'Cairo', sans-serif;
+    direction: rtl;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+.flatpickr-day {
+    border-radius: 8px;
+}
+
+.flatpickr-day.selected,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.flatpickr-day.today {
+    border: 2px solid var(--secondary-color);
+}
+
+.flatpickr-monthDropdown-months,
+.flatpickr-year {
+    font-family: 'Cairo', sans-serif;
+}
+
+/* إضافة التنسيقات الأخرى من الكود الأصلي دون تغيير */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: 'Cairo', sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) fixed;
+    padding: 10px;
+    -webkit-font-smoothing: antialiased;
+    touch-action: manipulation;
+}
+
+/* التنسيق العام للعناصر */
+.container {
+    width: 95%;
+    max-width: 900px;
+    margin: 10px auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    position: relative;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* العناوين */
+.app-title, .page-title {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+/* تنسيق الصفحة الرئيسية - المربعات */
+.home-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin-top: 25px;
+}
+
+.home-btn {
+    position: relative;
+    width: 250px;
+    height: 120px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: var(--transition);
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 10px;
+}
+
+.home-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+    transition: var(--transition);
+    z-index: 1;
+}
+
+.home-btn:hover::before {
+    transform: translateX(100%);
+}
+
+.home-btn .btn-text {
+    position: relative;
+    z-index: 2;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: var(--transition);
+}
+
+.home-btn:hover .btn-text {
+    transform: scale(1.1);
+}
+
+.home-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* ألوان الأزرار */
+.admin-btn {
+    background: linear-gradient(45deg, #ff6b6b, #e63946);
+}
+
+.teacher-btn {
+    background: linear-gradient(45deg, #4facfe, #00f2fe);
+}
+
+.student-btn {
+    background: linear-gradient(45deg, #40c9a2, #2ecc71);
+}
+
+/* الأزرار الأخرى */
+.buttons-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.main-btn, .admin-option-btn, .teacher-option-btn, 
+.add-btn, .back-btn, .save-btn, .login-btn, .cancel-btn, .delete-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: var(--shadow);
+    text-align: center;
+}
+
+.main-btn {
+    font-size: 1.1rem;
+}
+
+.admin-option-btn {
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    color: white;
+}
+
+.back-btn {
+    background: linear-gradient(45deg, #a4b0be, #747d8c);
+    color: white;
+    margin-top: 20px;
+}
+
+.add-btn {
+    background: linear-gradient(45deg, #40c9a2, #2ecc71);
+    color: white;
+}
+
+.save-btn, .login-btn {
+    background: linear-gradient(45deg, #4facfe, #00f2fe);
+    color: white;
+}
+
+.cancel-btn, .delete-btn {
+    background: linear-gradient(45deg, #ff4757, #e63946);
+    color: white;
+}
+
+/* حقول الإدخال */
+.mobile-friendly-input, .mobile-friendly-textarea,
+#new-class-input, #new-section-input, 
+#new-subject-input, #new-teacher-input,
+#teacher-username, #teacher-password,
+#homework-text, #class-select,
+#admin-username, #admin-password,
+#new-admin-username, #new-admin-password, #confirm-admin-password,
+#new-teacher-username, #new-teacher-password, #confirm-teacher-password {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    font-family: 'Cairo', sans-serif;
+    background: #f1f2f6;
+    box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.1);
+    transition: var(--transition);
+}
+
+.mobile-friendly-textarea, #homework-text {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.add-item-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.form-group input[type="checkbox"] {
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+/* القوائم */
+.items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 20px 0;
+}
+
+.item-card {
+    padding: 15px;
+    border-radius: var(--border-radius);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #ffffff;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    cursor: pointer;
+    color: var(--primary-color);
+    min-height: 44px;
+}
+
+.item-name {
+    font-weight: 700;
+}
+
+.item-details    .item-details {
+    font-size: 0.9rem;
+    color: #747d8c;
+}
+
+.item-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.edit-btn, .delete-btn {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.edit-btn {
+    background: linear-gradient(45deg, #ffa502, #ff7f50);
+    color: white;
+}
+
+/* الجداول */
+.schedule-container {
+    width: 100%;
+    overflow-x: auto;
+    margin: 20px 0;
+    -webkit-overflow-scrolling: touch;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+    background: #ffffff;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+th {
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    font-weight: 700;
+}
+
+tr:nth-child(even) {
+    background-color: #f1f2f6;
+}
+
+.schedule-cell {
+    min-height: 60px;
+    cursor: pointer;
+    position: relative;
+}
+
+.empty-cell {
+    color: #a4b0be;
+}
+
+.has-homework {
+    color: #2ecc71;
+    font-weight: 700;
+}
+
+.no-homework {
+    color: #ff4757;
+}
+
+/* تسليط الضوء على اليوم الحالي */
+.current-day {
+    background: linear-gradient(45deg, #fff3a0, #ffd700);
+    font-weight: 700;
+    color: #1e3c72;
+}
+
+/* النماذج */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.teacher-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+/* الخطوات */
+.assignment-steps {
+    margin-bottom: 20px;
+}
+
+.step h3 {
+    margin-bottom: 15px;
+    color: var(--primary-color);
+    border-bottom: 2px solid #dfe4ea;
+    padding-bottom: 5px;
+}
+
+/* معلومات الواجب */
+.homework-info, .homework-content {
+    padding: 15px;
+    background: #f1f2f6;
+    border-radius: var(--border-radius);
+    margin: 15px 0;
+    box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.homework-content h3 {
+    margin-bottom: 10px;
+    color: var(--primary-color);
+}
+
+/* النافذة المنبثقة */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    width: 90%;
+    max-width: 450px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.subjects-dropdown {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.subject-option {
+    padding: 12px;
+    background: #f1f2f6;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: var(--transition);
+    color: var(--primary-color);
+}
+
+/* كلمة المرور */
+.password-display {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f1f2f6;
+    border-radius: var(--border-radius);
+    text-align: center;
+    font-size: 1rem;
+    color: var(--primary-color);
+    box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.password-copy {
+    color: #2ecc71;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.8);
+    transition: var(--transition);
+}
+
+/* تأثيرات اللمس */
+button:active, .item-card:active, .subject-option:active {
+    transform: scale(0.97);
+    opacity: 0.9;
+}
+
+/* تنسيق بيانات المدرسة */
+.school-info {
+    text-align: center;
+    margin: 15px 0;
+    padding: 10px;
+    background: #f1f2f6;
+    border-radius: var(--border-radius);
+    box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.school-info p {
+    font-size: 1rem;
+    color: var(--primary-color);
+    margin: 5px 0;
+}
+
+/* تنسيق التذييل */
+.footer {
+    text-align: center;
+    margin-top: 20px;
+    padding: 10px;
+    font-size: 0.9rem;
+    color: #747d8c;
+}
+
+/* تنسيق صفحة التقارير */
+.report-filters {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.report-results {
+    margin: 20px 0;
+    padding: 15px;
+    background: #f1f2f6;
+    border-radius: var(--border-radius);
+    box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.report-item {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.report-item:last-child {
+    border-bottom: none;
+}
+
+.report-item h4 {
+    color: var(--primary-color);
+    margin-bottom: 5px;
+}
+
+.report-item p {
+    font-size: 0.9rem;
+    color: #747d8c;
+}
+
+/* تعديلات للجوال */
+@media (max-width: 600px) {
+    .container {
+        padding: 15px;
+        border-radius: 10px;
+    }
+    
+    .app-title, .page-title {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .home-btn {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .home-btn .btn-text {
+        font-size: 1rem;
+    }
+    
+    .item-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .item-actions {
+        align-self: flex-end;
+    }
+    
+    th, td {
+        padding: 8px;
+        font-size: 0.9rem;
+    }
+    
+    .add-item-container {
+        flex-direction: column;
+    }
+    
+    .add-btn {
+        width: 100%;
+    }
+    
+    .school-info p {
+        font-size: 0.9rem;
+    }
+    
+    .footer {
+        font-size: 0.8rem;
+    }
+
+    .report-tabs {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .tab-btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 360px) {
+    .app-title, .page-title {
+        font-size: 1.3rem;
+    }
+    
+    .home-btn {
+        width: 90px;
+        height: 90px;
+    }
+    
+    .home-btn .btn-text {
+        font-size: 0.9rem;
+    }
+}
+
+/* تعديلات للعرض الأفقي على الجوال */
+@media (max-width: 600px) and (orientation: landscape) {
+    .container {
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+    
+    .home-buttons {
+        flex-direction: column;
+    }
+    
+    .home-btn {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+/* إزالة تأثيرات hover على الأجهزة التي لا تدعمها */
+@media (hover: none) {
+    .home-btn:hover::before {
+        transform: none;
+    }
+    
+    .home-btn:hover .btn-text {
+        transform: none;
+    }
+
+    .tab-btn:hover {
+        transform: none;
+    }
+}
+
+/* دعم PWA */
+@media all and (display-mode: standalone) {
+    body {
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+    
+    .container {
+        border-radius: 0;
+        min-height: 100vh;
+        margin: 0;
+    }
+}
+
+/* تنسيق أزرار التنقل بين الأسابيع */
+#teacher-schedule-navigation, #student-schedule-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.week-nav-btn {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+}
+
+.week-nav-btn:active {
+    transform: scale(0.95);
+}
+
+/* زر الأسبوع السابق (سهم يمين، على اليسار) */
+.prev-week-btn {
+    order: -1;
+}
+
+.prev-week-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    border-top: 3px solid white;
+    border-right: 3px solid white;
+    transform: translate(-40%, -50%) rotate(45deg);
+}
+
+/* زر الأسبوع التالي (سهم يسار، على اليمين) */
+.next-week-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    border-top: 3px solid white;
+    border-left: 3px solid white;
+    transform: translate(-60%, -50%) rotate(-45deg);
+}
+
+/* تحسينات للجوال */
+@media (max-width: 600px) {
+    .week-nav-btn {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .next-week-btn::before, .prev-week-btn::before {
+        width: 10px;
+        height: 10px;
+        border-width: 2px;
+    }
+}
+
+/* إضافة تنسيق للمواد المسندة لمعلمين آخرين */
+.item-card.assigned-to-other {
+    background-color: #d3d3d3;
+    color: #666;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+/* إضافة تنسيق للمواد المسندة للمعلم الحالي */
+.item-card.assigned-to-current {
+    background-color: #e6ffe6;
+    border: 2px solid #2ecc71;
+    color: #2ecc71;
+}
+
+/* تنسيق التنبيهات الداخلية */
+.internal-alert {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ffffff;
+    padding: 15px 25px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    z-index: 2000;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    text-align: center;
+    max-width: 90%;
+    animation: fadeInOut 3s ease forwards;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translate(-50%, -20px); }
+    10% { opacity: 1; transform: translate(-50%, 0); }
+    90% { opacity: 1; transform: translate(-50%, 0); }
+    100% { opacity: 0; transform: translate(-50%, -20px); }
+}
